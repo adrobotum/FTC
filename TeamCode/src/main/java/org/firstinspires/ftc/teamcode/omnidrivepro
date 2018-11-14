@@ -1,0 +1,146 @@
+
+
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
+
+
+@TeleOp(name="omnidrivepro", group="Linear Opmode")
+@Disabled
+public class omnidrivepro extends LinearOpMode {
+
+    // Declare OpMode members.
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor motor1 = null;
+    private DcMotor motor2 = null;
+    private DcMotor motor3 = null;
+    private DcMotor motor4 = null;
+
+    @Override
+    public void runOpMode() {
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        // Initialize the hardware variables. Note that the strings used here as parameters
+        // to 'get' must correspond to the names assigned during the robot configuration
+        // step (using the FTC Robot Controller app on the phone).
+        motor1  = hardwareMap.get(DcMotor.class, "motor1");
+        motor2 = hardwareMap.get(DcMotor.class, "motor2");
+        motor3 = hardwareMap.get(DcMotor.class, "motor3");
+        motor4 = hardwareMap.get(DcMotor.class, "motor4");
+
+
+        // Most robots need the motor on one side to be reversed to drive forward
+        // Reverse the motor that runs backwards when connected directly to the battery
+        //leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        //rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        motor1.setDirection(DcMotor.Direction.FORWARD);
+        motor2.setDirection(DcMotor.Direction.FORWARD);
+        motor3.setDirection(DcMotor.Direction.REVERSE);
+        motor4.setDirection(DcMotor.Direction.REVERSE);
+
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+        runtime.reset();
+
+        // run until the end of the match (driver presses STOP)
+        while (opModeIsActive()) {
+
+            //left stick: omni drive x and y
+            double leftPower_y = -gamepad1.left_stick_y ;
+            double rightPower_y = -gamepad1.left_stick_y ;
+            double leftPower_x = gamepad1.left_stick_x ;
+            double rightPower_x = gamepad1.left_stick_x ;
+
+            //right stick: turning around axis
+
+            double turn = gamepad1.right_stick_x ;
+
+            //power to variable:
+            // - en + misschien aanpassen want niet x-as positief of negatief links en rechts?
+
+            double left1Powerxy = Range.clip(leftPower_y + leftPower_x, -1.0, 1.0);
+            double left2Powerxy = Range.clip(leftPower_y - leftPower_x, -1.0, 1.0);
+            double right1Powerxy = Range.clip(rightPower_y + rightPower_x, -1.0, 1.0);
+            double right2Powerxy = Range.clip(rightPower_y - rightPower_x, -1.0, 1.0);
+
+            double left1Power = Range.clip(left1Powerxy - turn, -1.0, 1.0);
+            double left2Power = Range.clip(left2Powerxy - turn, -1.0, 1.0);
+            double right1Power = Range.clip(right1Powerxy + turn, -1.0, 1.0);
+            double right2Power = Range.clip(right2Powerxy + turn, -1.0, 1.0) ;
+
+            //set power to motor:
+
+
+            //absolute direction: left:
+            if (gamepad1.b)
+            {
+                motor1.setPower(-right2Power);
+                motor2.setPower(left1Power);
+                motor3.setPower(-left2Power);
+                motor4.setPower(right1Power);
+            }
+            //absolute direction: down:
+            else if (gamepad1.a)
+            {
+                motor1.setPower(-right1Power);
+                motor2.setPower(-right2Power);
+                motor3.setPower(-left1Power);
+                motor4.setPower(-left2Power);
+            }
+            //absolute direction: right:
+            else if (gamepad1.x)
+            {
+                motor1.setPower(left2Power);
+                motor2.setPower(-right1Power);
+                motor3.setPower(right2Power);
+                motor4.setPower(-left1Power);
+            }
+            else
+            {
+                //forward/normal drive direction
+                motor1.setPower(left1Power);
+                motor2.setPower(left2Power);
+                motor3.setPower(right1Power);
+                motor4.setPower(right2Power);
+            }
+
+
+            // Setup a variable for each drive wheel to save power level for telemetry
+            //double leftPower;
+            //double rightPower;
+
+            // Choose to drive using either Tank Mode, or POV Mode
+            // Comment out the method that's not used.  The default below is POV.
+
+            // POV Mode uses left stick to go forward, and right stick to turn.
+            // - This uses basic math to combine motions and is easier to drive straight.
+            //double drive = -gamepad1.left_stick_y;
+            //double turn  =  gamepad1.right_stick_x;
+            //leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
+            //rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+
+            // Tank Mode uses one stick to control each wheel.
+            // - This requires no math, but it is hard to drive forward slowly and keep straight.
+            // leftPower  = -gamepad1.left_stick_y ;
+            // rightPower = -gamepad1.right_stick_y ;
+
+            // Send calculated power to wheels
+            //leftDrive.setPower(leftPower);
+            //rightDrive.setPower(rightPower);
+
+            // Show the elapsed game time and wheel power.
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.update();
+            idle();
+        }
+    }
+}
