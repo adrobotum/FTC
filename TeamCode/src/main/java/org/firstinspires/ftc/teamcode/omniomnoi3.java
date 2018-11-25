@@ -33,6 +33,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -50,35 +54,51 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="omnisrivepropro", group="Linear Opmode")
-public class omnidrivepropro extends LinearOpMode {
+@TeleOp(name="omniomnoi3", group="Linear Opmode")
+public class omniomnoi3 extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-   // private DcMotor leftDrive = null;
-   // private DcMotor rightDrive = null;
-   private DcMotor motor1 = null;
+    // private DcMotor leftDrive = null;
+    // private DcMotor rightDrive = null;
+    private DcMotor motor1 = null;
     private DcMotor motor2 = null;
     private DcMotor motor3 = null;
     private DcMotor motor4 = null;
-double armpos = 0;
-double grabpos = 0;
+    private DcMotor crane = null;
+    //private Servo servoRight;
+    private Servo servoLeft;
+   // double armpos = 0;
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        servoLeft = hardwareMap.servo.get("servoLeft");
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-       // leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-       // rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        // leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+        // rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         DcMotor arm  = hardwareMap.get(DcMotor.class, "arm");
-
+        /*
+        servoLeft = hardwareMap.get(Servo.class, "servoLeft"); // ls -la
+        servoRight = hardwareMap.get(Servo.class, "servoRight");*/
+        //Servo lr = hardwareMap.get(Servo.class, "r");
         motor1  = hardwareMap.get(DcMotor.class, "motor1");
         motor2 = hardwareMap.get(DcMotor.class, "motor2");
         motor3 = hardwareMap.get(DcMotor.class, "motor3");
+
+
+
+       /* NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        if (colorSensor instanceof SwitchableLight) {
+            ((SwitchableLight)colorSensor).enableLight(true);
+        } */
+
         motor4 = hardwareMap.get(DcMotor.class, "motor4");
+        crane = hardwareMap.get(DcMotor.class, "crane");
       /*  Servo arm = hardwareMap.get(Servo.class, "arm");
         Servo g1 = hardwareMap.get(Servo.class, "g1");
         Servo g2 = hardwareMap.get(Servo.class, "g2");*/
@@ -91,6 +111,7 @@ double grabpos = 0;
         motor3.setDirection(DcMotor.Direction.REVERSE);
         motor4.setDirection(DcMotor.Direction.REVERSE);
         arm.setDirection(DcMotor.Direction.FORWARD);
+        crane.setDirection(DcMotor.Direction.FORWARD);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -102,10 +123,11 @@ double grabpos = 0;
             //double leftPower;
             //double rightPower;
             //left stick: omni drive x and y
-            double leftPower_y = -gamepad1.left_stick_y ;
-            double rightPower_y = -gamepad1.left_stick_y ;
+            double leftPower_y = gamepad1.left_stick_y ;
+            double rightPower_y = gamepad1.left_stick_y ;
             double leftPower_x = gamepad1.left_stick_x ;
             double rightPower_x = gamepad1.left_stick_x ;
+            //double grabpos = 0;
 
             //right stick: turning around axis
 
@@ -131,7 +153,7 @@ double grabpos = 0;
 
 
             //absolute direction: left:
-            if (gamepad1.x)
+            if (gamepad1.b)
             {
                 motor1.setPower(-right2Power);
                 motor2.setPower(left1Power);
@@ -147,7 +169,7 @@ double grabpos = 0;
                 motor4.setPower(-left2Power);
             }
             //absolute direction: right:
-            else if (gamepad1.b)
+            else if (gamepad1.x)
             {
                 motor1.setPower(left2Power);
                 motor2.setPower(-right1Power);
@@ -165,39 +187,74 @@ double grabpos = 0;
             // arm control
 
             if( gamepad1.dpad_up){
-arm.setPower(0.6);
+                arm.setPower(0.1);
                 //up
-}else if(gamepad1.dpad_down){
+            }else if(gamepad1.dpad_down){
                 //down
-arm.setPower(-0.6);
-}
-arm.setPower(0);
-
-/*
-
-if(gamepad1.dpad_right){
-grabpos -= 1;
-                //open
-}else if(gamepad1.dpad_left){
-grabpos += 1;
-                //close
-}
-//apply arm positions
-            arm.setPosition(armpos);
-            g1.setPosition(grabpos);
-            g2.setPosition(grabpos);
-*/
+                arm.setPower(-0.1);
+            }else
+                {
+                arm.setPower(0);
+            }
 
 
+            double grabpos = 0.5;
+
+
+            if(gamepad1.dpad_right)
+            {
+                grabpos += 1.0;
+            }
+                //                //open
+            else if(gamepad1.dpad_left)
+            {
+                grabpos += 1.0;
+            }
+
+                //                //close
+                //
+                ////apply arm positions
+                //          //  arm.setPosition(armpos);
+            servoLeft.setPosition(grabpos);
+
+            //servoRight.setPosition(-grijpen);
+           /* double grapservo;
+            if (gamepad1.dpad_right)
+            {
+                grapservo -= 1;
+            }
+            double grabpos = Range.clip(grapservo, -1.0, 1.0); */
+           if (gamepad1.left_bumper)
+           {
+               crane.setPower(0.5);
+           }
+           else if (gamepad1.right_bumper)
+           {
+               crane.setPower(-0.5);
+           }
+           else
+           {
+               crane.setPower(0.0);
+           }
+
+
+
+
+
+
+
+
+
+// ls -la : echo "" > bash.txt >> /dev/null
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
-           // double drive = -gamepad1.left_stick_y;
-           // double turn  =  gamepad1.right_stick_x;
-           // leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
+            // double drive = -gamepad1.left_stick_y;
+            // double turn  =  gamepad1.right_stick_x;
+            // leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             //rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
             // Tank Mode uses one stick to control each wheel.
@@ -208,6 +265,17 @@ grabpos += 1;
             // Send calculated power to wheels
             //leftDrive.setPower(leftPower);
             //rightDrive.setPower(rightPower);
+            //NormalizedRGBA colors = colorSensor.getNormalizedColors();
+
+
+            //telemetry.addData("color", colors.red + " " + colors.green + " " + colors.blue);
+           /* if(colors.red > 0.5 && colors.green > 0.5 && colors.blue < 0.3){
+            telemetry.addData("col", "yellow");
+            }else if(colors.red > 0.02 && colors.blue < 0.1){
+                telemetry.addData("col", "yellow");
+            }*/
+
+
             telemetry.addData("motor1 Position", "" +  motor1.getCurrentPosition());
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());

@@ -28,17 +28,10 @@
  */
 
 package org.firstinspires.ftc.teamcode;
-import java.util.concurrent.TimeUnit;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -46,16 +39,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-@Autonomous(name="auto", group="Linear Opmode")
-public class Auto extends LinearOpMode {
+
+@Autonomous(name="forward", group="Linear Opmode")
+public class forward extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -110,16 +103,39 @@ public class Auto extends LinearOpMode {
 
 
         // lowerrobot();
-        crane.setPower(-0.5);
+    /*    crane.setPower(-0.5);
         sleep(3000);
         crane.setPower(0);
 
 drive("left", 500);
+sleep(500);*/
+
+
+
+drive("back", 1000);
+sleep(1000);
+turn("left", 500);
+arm.setPower(-0.4);
+sleep(1000);
+arm.setPower(0.2);
+sleep(200);
+arm.setPower(-0.4);
+sleep(200);
+
+/*
+drive("left", 1000);
+motor2.setPower(-1);
+        motor4.setPower(-1);
+sleep(4000);
+
+        motor2.setPower(0);
+        motor4.setPower(0);
+
+
+arm.setPower(0.5);
 sleep(500);
-
-
-
-
+arm.setPower(0);
+*/
 
 
                 /*
@@ -140,7 +156,7 @@ double blue = colors.blue;
             //drive further
             drive("left", 100);
             sleep(100);
-            driven += 100;
+            dr4iven += 100;
             NormalizedRGBA colornew = colorSensor.getNormalizedColors();
             red = colornew.red;
             green = colornew.green;
@@ -196,8 +212,8 @@ updown.setPower(0);
 
 
 }
-*/
-/*public void turn(String direction, long ms){
+*/}
+public void turn(String direction, long ms){
         if(direction == "L"){
             motor1.setPower(-1);
             motor2.setPower(-1);
@@ -222,8 +238,8 @@ updown.setPower(0);
         }
 
 
-}*/
-    }
+}
+
 public void stoprobot(){
     motor1.setPower(0);
     motor2.setPower(0);
