@@ -92,10 +92,10 @@ public class omniomnoi3 extends LinearOpMode {
 
 
 
-       /* NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         if (colorSensor instanceof SwitchableLight) {
             ((SwitchableLight)colorSensor).enableLight(true);
-        } */
+        }
 
         motor4 = hardwareMap.get(DcMotor.class, "motor4");
         crane = hardwareMap.get(DcMotor.class, "crane");
@@ -187,11 +187,11 @@ public class omniomnoi3 extends LinearOpMode {
             // arm control
 
             if( gamepad1.dpad_up){
-                arm.setPower(0.1);
+                arm.setPower(1);
                 //up
             }else if(gamepad1.dpad_down){
                 //down
-                arm.setPower(-0.1);
+                arm.setPower(-1);
             }else
                 {
                 arm.setPower(0);
@@ -226,11 +226,11 @@ public class omniomnoi3 extends LinearOpMode {
             double grabpos = Range.clip(grapservo, -1.0, 1.0); */
            if (gamepad1.left_bumper)
            {
-               crane.setPower(0.5);
+               crane.setPower(1);
            }
            else if (gamepad1.right_bumper)
            {
-               crane.setPower(-0.5);
+               crane.setPower(-1);
            }
            else
            {
@@ -265,15 +265,15 @@ public class omniomnoi3 extends LinearOpMode {
             // Send calculated power to wheels
             //leftDrive.setPower(leftPower);
             //rightDrive.setPower(rightPower);
-            //NormalizedRGBA colors = colorSensor.getNormalizedColors();
+            NormalizedRGBA colors = colorSensor.getNormalizedColors();
 
 
             //telemetry.addData("color", colors.red + " " + colors.green + " " + colors.blue);
-           /* if(colors.red > 0.5 && colors.green > 0.5 && colors.blue < 0.3){
+            if(colors.red > 0.5 && colors.green > 0.5 && colors.blue < 0.3){
             telemetry.addData("col", "yellow");
             }else if(colors.red > 0.02 && colors.blue < 0.1){
                 telemetry.addData("col", "yellow");
-            }*/
+            }
 
 
             telemetry.addData("motor1 Position", "" +  motor1.getCurrentPosition());

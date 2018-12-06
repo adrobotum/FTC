@@ -32,6 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -61,7 +64,7 @@ public class forward extends LinearOpMode {
     private DcMotor motor4 = null;
     private DcMotor crane = null;
     private DcMotor arm = null;
-    //boolean hasyellowbeenfound = false;
+    private boolean hasyellowbeenfound = false;
 
     @Override
     public void runOpMode() {
@@ -78,7 +81,7 @@ public class forward extends LinearOpMode {
 
 
         //pullcontroller = hardwareMap.get(DcMotor.class, "pc");
-       /* NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         if (colorSensor instanceof SwitchableLight) {
             ((SwitchableLight) colorSensor).enableLight(true);
         }
@@ -112,15 +115,17 @@ sleep(500);*/
 
 
 
-drive("back", 1000);
+drive("back", 1500);
 sleep(1000);
-turn("left", 500);
-arm.setPower(-0.4);
-sleep(1000);
-arm.setPower(0.2);
-sleep(200);
-arm.setPower(-0.4);
-sleep(200);
+//turn("left", 500);
+arm.setPower(0.4);
+sleep(2000);
+//arm.setPower(0.2);
+//sleep(200);
+//arm.setPower(-0.4);
+//sleep(200);
+//arm.setPower(0.4);
+//sleep(1000);
 
 /*
 drive("left", 1000);
@@ -141,9 +146,9 @@ arm.setPower(0);
                 /*
         claim minerals
         */
-        //NormalizedRGBA colors = colorSensor.getNormalizedColors();
+        NormalizedRGBA colors = colorSensor.getNormalizedColors();
 
-        /*long driven = 0;
+        long driven = 0;
         double red = colors.red;
         double green = colors.green;
 double blue = colors.blue;
@@ -156,7 +161,7 @@ double blue = colors.blue;
             //drive further
             drive("left", 100);
             sleep(100);
-            dr4iven += 100;
+            driven += 100;
             NormalizedRGBA colornew = colorSensor.getNormalizedColors();
             red = colornew.red;
             green = colornew.green;
@@ -175,12 +180,12 @@ drive("left", foundat);
 drive("forward", 200);
 
 //in vak
-        arm.setPower(-0.5);
+    /*    arm.setPower(-0.5);
         sleep(500);
         arm.setPower(0);
         arm.setPower(0.5);
         sleep(500);
-        arm.setPower(0);
+        arm.setPower(0);*/
 
 
 

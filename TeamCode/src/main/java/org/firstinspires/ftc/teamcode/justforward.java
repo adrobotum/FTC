@@ -112,8 +112,8 @@ sleep(500);*/
 
 
 
-drive("forward", 1000);
-sleep(1000);
+drive("forward", 1100);
+sleep(1100);
 
 
 /*
