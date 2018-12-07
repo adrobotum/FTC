@@ -74,7 +74,8 @@ public class omniomnoi3 extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        servoLeft = hardwareMap.servo.get("servoLeft");
+
+
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -215,7 +216,7 @@ public class omniomnoi3 extends LinearOpMode {
                 //
                 ////apply arm positions
                 //          //  arm.setPosition(armpos);
-            servoLeft.setPosition(grabpos);
+          //  servoLeft.setPosition(grabpos);
 
             //servoRight.setPosition(-grijpen);
            /* double grapservo;
@@ -268,7 +269,7 @@ public class omniomnoi3 extends LinearOpMode {
             NormalizedRGBA colors = colorSensor.getNormalizedColors();
 
 
-            //telemetry.addData("color", colors.red + " " + colors.green + " " + colors.blue);
+            telemetry.addData("color", colors.red + " " + colors.green + " " + colors.blue);
             if(colors.red > 0.5 && colors.green > 0.5 && colors.blue < 0.3){
             telemetry.addData("col", "yellow");
             }else if(colors.red > 0.02 && colors.blue < 0.1){
