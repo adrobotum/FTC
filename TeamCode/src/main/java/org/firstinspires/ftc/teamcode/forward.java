@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="forward", group="Linear Opmode")
+@Autonomous(name = "autoLuc", group = "Linear Opmode")
 public class forward extends LinearOpMode {
 
     // Declare OpMode members.
@@ -63,6 +63,7 @@ public class forward extends LinearOpMode {
     // DcMotor updown  = hardwareMap.get(DcMotor.class, "updown");
     private DcMotor motor4 = null;
     private DcMotor crane = null;
+    private DcMotor front = null;
     private DcMotor arm = null;
     private boolean hasyellowbeenfound = false;
 
@@ -71,7 +72,7 @@ public class forward extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-
+        front = hardwareMap.get(DcMotor.class, "front");
         motor1 = hardwareMap.get(DcMotor.class, "motor1");
         motor2 = hardwareMap.get(DcMotor.class, "motor2");
         arm = hardwareMap.get(DcMotor.class, "arm");
@@ -113,13 +114,19 @@ public class forward extends LinearOpMode {
 drive("left", 500);
 sleep(500);*/
 
-
-
-drive("back", 1500);
-sleep(1000);
+        crane.setPower(1);
+        //  arm.setPower(0.14);
+        sleep(15000);
+        crane.setPower(0);
+        //    arm.setPower(0);
+        drive("right", 1000);
+        sleep(1000);
+        drive("back", 1500);
+        sleep(1500);
 //turn("left", 500);
-arm.setPower(0.4);
-sleep(2000);
+        arm.setPower(0.4);
+        sleep(2000);
+        arm.setPower(0);
 //arm.setPower(0.2);
 //sleep(200);
 //arm.setPower(-0.4);
@@ -151,33 +158,33 @@ arm.setPower(0);
         long driven = 0;
         double red = colors.red;
         double green = colors.green;
-double blue = colors.blue;
-        if(gamepad1.a) {
+        double blue = colors.blue;
+        if (gamepad1.a) {
             hasyellowbeenfound = true;
         }
 
-      while (red > 0.02
-              && blue < 0.1 && !hasyellowbeenfound){
+        while (red > 0.02
+                && blue < 0.1 && !hasyellowbeenfound) {
             //drive further
-            drive("left", 100);
+            //       drive("left", 100);
             sleep(100);
             driven += 100;
             NormalizedRGBA colornew = colorSensor.getNormalizedColors();
             red = colornew.red;
             green = colornew.green;
             blue = colornew.blue;
-      }
+        }
 
 
         long foundat = driven;
         hasyellowbeenfound = true;
 
 
-drive("forward", 300);
+//drive("forward", 300);
         //sleep(200);
-       // drive("back", 400);
-drive("left", foundat);
-drive("forward", 200);
+        // drive("back", 400);
+//drive("left", foundat);
+//drive("forward", 200);
 
 //in vak
     /*    arm.setPower(-0.5);
@@ -217,9 +224,11 @@ updown.setPower(0);
 
 
 }
-*/}
-public void turn(String direction, long ms){
-        if(direction == "L"){
+*/
+    }
+
+    public void turn(String direction, long ms) {
+        if (direction == "L") {
             motor1.setPower(-1);
             motor2.setPower(-1);
             motor3.setPower(1);
@@ -229,7 +238,7 @@ public void turn(String direction, long ms){
             motor2.setPower(0);
             motor3.setPower(0);
             motor4.setPower(0);
-        }else if(direction == "R"){
+        } else if (direction == "R") {
 
             motor1.setPower(1);
             motor2.setPower(1);
@@ -243,26 +252,27 @@ public void turn(String direction, long ms){
         }
 
 
-}
+    }
 
-public void stoprobot(){
-    motor1.setPower(0);
-    motor2.setPower(0);
-    motor3.setPower(0);
-    motor4.setPower(0);
-}
+    public void stoprobot() {
+        motor1.setPower(0);
+        motor2.setPower(0);
+        motor3.setPower(0);
+        motor4.setPower(0);
+    }
+
     public void drive(String loc,
-                             long ms) {
+                      long ms) {
 
-        if(loc == "forward") {
+        if (loc == "forward") {
             motor1.setPower(1);
             motor2.setPower(1);
             motor3.setPower(1);
             motor4.setPower(1);
             sleep(ms);
-         stoprobot();
+            stoprobot();
         }
-        if(loc == "back") {
+        if (loc == "back") {
             motor1.setPower(-1);
             motor2.setPower(-1);
             motor3.setPower(-1);
@@ -270,7 +280,7 @@ public void stoprobot(){
             sleep(ms);
             stoprobot();
         }
-        if(loc == "left") {
+        if (loc == "left") {
             motor1.setPower(-1);
             motor2.setPower(1);
             motor3.setPower(-1);
@@ -278,7 +288,7 @@ public void stoprobot(){
             sleep(ms);
             stoprobot();
         }
-        if(loc == "right") {
+        if (loc == "right") {
             motor1.setPower(1);
             motor2.setPower(-1);
             motor3.setPower(1);
@@ -286,7 +296,6 @@ public void stoprobot(){
             sleep(ms);
             stoprobot();
         }
-
 
 
     }

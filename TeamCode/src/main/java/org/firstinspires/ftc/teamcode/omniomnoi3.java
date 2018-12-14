@@ -66,6 +66,7 @@ public class omniomnoi3 extends LinearOpMode {
     private DcMotor motor3 = null;
     private DcMotor motor4 = null;
     private DcMotor crane = null;
+    private DcMotor front = null;
     //private Servo servoRight;
     private Servo servoLeft;
    // double armpos = 0;
@@ -82,6 +83,7 @@ public class omniomnoi3 extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         // leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         // rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        front = hardwareMap.get(DcMotor.class, "front");
         DcMotor arm  = hardwareMap.get(DcMotor.class, "arm");
         /*
         servoLeft = hardwareMap.get(Servo.class, "servoLeft"); // ls -la
@@ -190,7 +192,7 @@ public class omniomnoi3 extends LinearOpMode {
             if( gamepad1.dpad_up){
                 arm.setPower(1);
                 //up
-            }else if(gamepad1.dpad_down){
+            }else if(gamepad1.dpad_down){//kettingen
                 //down
                 arm.setPower(-1);
             }else
@@ -204,12 +206,12 @@ public class omniomnoi3 extends LinearOpMode {
 
             if(gamepad1.dpad_right)
             {
-                grabpos += 1.0;
+            //    grabpos += 1.0;
             }
                 //                //open
             else if(gamepad1.dpad_left)
             {
-                grabpos += 1.0;
+               // grabpos += 1.0;
             }
 
                 //                //close
@@ -228,17 +230,27 @@ public class omniomnoi3 extends LinearOpMode {
            if (gamepad1.left_bumper)
            {
                crane.setPower(1);
+            //   arm.setPower(0.14);
            }
            else if (gamepad1.right_bumper)
            {
                crane.setPower(-1);
+              // arm.setPower(-0.14);
            }
            else
            {
                crane.setPower(0.0);
+              // arm.setPower(0.0);
            }
 
-
+if(gamepad1.dpad_left){
+               front.setPower(1.0);
+}else if(gamepad1.dpad_right){
+               front.setPower(-1.0);
+}else{
+               front.setPower(0
+               );
+}
 
 
 
