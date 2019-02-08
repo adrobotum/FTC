@@ -72,7 +72,7 @@ public class forward extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        front = hardwareMap.get(DcMotor.class, "front");
+        front = hardwareMap.get(DcMotor.class, "u");
         motor1 = hardwareMap.get(DcMotor.class, "motor1");
         motor2 = hardwareMap.get(DcMotor.class, "motor2");
         arm = hardwareMap.get(DcMotor.class, "arm");
@@ -82,10 +82,10 @@ public class forward extends LinearOpMode {
 
 
         //pullcontroller = hardwareMap.get(DcMotor.class, "pc");
-        NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-        if (colorSensor instanceof SwitchableLight) {
-            ((SwitchableLight) colorSensor).enableLight(true);
-        }
+//        NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+//        if (colorSensor instanceof SwitchableLight) {
+//            ((SwitchableLight) colorSensor).enableLight(true);
+//        }
       /*  Servo arm = hardwareMap.get(Servo.class, "arm");
         Servo g1 = hardwareMap.get(Servo.class, "g1");
         Servo g2 = hardwareMap.get(Servo.class, "g2");
@@ -116,7 +116,7 @@ sleep(500);*/
 
         crane.setPower(1);
         //  arm.setPower(0.14);
-        sleep(15000);
+        sleep(3000);
         crane.setPower(0);
         //    arm.setPower(0);
         drive("right", 1000);
@@ -127,12 +127,14 @@ sleep(500);*/
         arm.setPower(0.4);
         sleep(2000);
         arm.setPower(0);
-//arm.setPower(0.2);
+//ar
+// m.setPower(0.2);
 //sleep(200);
 //arm.setPower(-0.4);
 //sleep(200);
 //arm.setPower(0.4);
 //sleep(1000);
+
 
 /*
 drive("left", 1000);
@@ -153,32 +155,33 @@ arm.setPower(0);
                 /*
         claim minerals
         */
-        NormalizedRGBA colors = colorSensor.getNormalizedColors();
-
-        long driven = 0;
-        double red = colors.red;
-        double green = colors.green;
-        double blue = colors.blue;
-        if (gamepad1.a) {
-            hasyellowbeenfound = true;
-        }
-
-        while (red > 0.02
-                && blue < 0.1 && !hasyellowbeenfound) {
-            //drive further
-            //       drive("left", 100);
-            sleep(100);
-            driven += 100;
-            NormalizedRGBA colornew = colorSensor.getNormalizedColors();
-            red = colornew.red;
-            green = colornew.green;
-            blue = colornew.blue;
-        }
-
-
-        long foundat = driven;
-        hasyellowbeenfound = true;
-
+      //  NormalizedRGBA colors = colorSensor.getNormalizedColors();
+//
+//        long driven = 0;
+//        double red = colors.red;
+//        double green = colors.green;
+//        double blue = colors.blue;
+//        if (
+//                gamepad1.a) {
+//            hasyellowbeenfound = true;
+//        }
+//
+//        while (red > 0.02
+//                && blue < 0.1 && !hasyellowbeenfound) {
+//            //drive further
+//            //       drive("left", 100);
+//            sleep(100);
+//            driven += 100;
+//            NormalizedRGBA colornew = colorSensor.getNormalizedColors();
+//            red = colornew.red;
+//            green = colornew.green;
+//            blue = colornew.blue;
+//        }
+//
+//
+//        long foundat = driven;
+//        hasyellowbeenfound = true;
+//
 
 //drive("forward", 300);
         //sleep(200);

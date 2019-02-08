@@ -54,6 +54,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
 @Autonomous(name="auto", group="Linear Opmode")
 public class Auto extends LinearOpMode {
 
@@ -70,8 +78,26 @@ public class Auto extends LinearOpMode {
     private DcMotor arm = null;
     //boolean hasyellowbeenfound = false;
 
-    @Override
+
+    OpenGLMatrix lastLocation = null;
+VuforiaLocalizer vuforia;
+
+     @Override
     public void runOpMode() {
+
+         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+
+         parameters.vuforiaLicenseKey = "AWVeyNv/////AAABmVE9v4SQAEhohP8/ReQFrZY5CCjekal9Xlt/c2w7UtFRaxT00XE2rIMuZxLLMj+N0LRS0d9Znhv1hkTTsx1Cjp5/lDPau3yjvNeMTPdwKImabdbQypKO0AbS5VMSqWXbEIS2ZTu7dqVvO+KozvKsa4pHwmAv3VphDwMs6QN811tP20dn2xVDcOL3tzavpuJAfTwXb8wHhF3b8BMm/6zowmrjfyl6Wr9RPnth2qwSIORbTv9SGq0u47WxWO6WfXyO6Y6LDknYcdEwVX6eynz4F/6cPVn7figk3gGr+epaxL0OfXLsADg+ZSqX4P3XoEAQyyCWddygnMZq3MtlNcVPIuXnZxhiXWqgTDS2isnf6NFs";
+         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+         vuforia = ClassFactory.getInstance().createVuforia(parameters);
+         VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+         VuforiaTrackable relicTemplate = relicTrackables.get(0);
+         relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
+
+
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -117,9 +143,16 @@ public class Auto extends LinearOpMode {
 drive("left", 500);
 sleep(500);
 
+drive("back", 1000);
+sleep(1000);
 
 
 
+//while(true){
+//    RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+//    telemetry.addData("VuMark", "%s visible", vuMark);
+//    telemetry.update();
+//}
 
 
                 /*
@@ -172,6 +205,7 @@ drive("forward", 200);
         drive("right", 350);
         drive("left", 1500);
 turn("left", 250);
+
 drive("left", 1500);*/
 
         /*

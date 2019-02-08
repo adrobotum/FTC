@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -65,10 +66,15 @@ public class omniomnoi3 extends LinearOpMode {
     private DcMotor motor2 = null;
     private DcMotor motor3 = null;
     private DcMotor motor4 = null;
+    private DcMotor arm = null;
+    private DcMotor u = null;
     private DcMotor crane = null;
-    private DcMotor front = null;
+    private DcMotor I = null;
+    private CRServo mouth = null;
+
+   // private DcMotor front = null;
     //private Servo servoRight;
-    private Servo servoLeft;
+    //private Servo servoLeft;
    // double armpos = 0;
 
     @Override
@@ -83,27 +89,30 @@ public class omniomnoi3 extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         // leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         // rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        front = hardwareMap.get(DcMotor.class, "front");
-        DcMotor arm  = hardwareMap.get(DcMotor.class, "arm");
+    //    front = hardwareMap.get(DcMotor.class, "front");
+     //   DcMotor arm  = hardwareMap.get(DcMotor.class, "arm");
         /*
         servoLeft = hardwareMap.get(Servo.class, "servoLeft"); // ls -la
         servoRight = hardwareMap.get(Servo.class, "servoRight");*/
         //Servo lr = hardwareMap.get(Servo.class, "r");
-        motor1  = hardwareMap.get(DcMotor.class, "motor1");
+        motor1 = hardwareMap.get(DcMotor.class, "motor1");
         motor2 = hardwareMap.get(DcMotor.class, "motor2");
         motor3 = hardwareMap.get(DcMotor.class, "motor3");
-
-
-
-        NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-        if (colorSensor instanceof SwitchableLight) {
-            ((SwitchableLight)colorSensor).enableLight(true);
-        }
-
         motor4 = hardwareMap.get(DcMotor.class, "motor4");
+
+
+    //    NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+     //   if (colorSensor instanceof SwitchableLight) {
+     //       ((SwitchableLight)colorSensor).enableLight(true);
+     //   }
+
+     //   crane = hardwareMap.get(DcMotor.class, "crane");
+        arm = hardwareMap.get(DcMotor.class, "arm");
+        u = hardwareMap.get(DcMotor.class, "u");
         crane = hardwareMap.get(DcMotor.class, "crane");
-      /*  Servo arm = hardwareMap.get(Servo.class, "arm");
-        Servo g1 = hardwareMap.get(Servo.class, "g1");
+        I = hardwareMap.get(DcMotor.class, "I");
+        mouth = hardwareMap.get(CRServo.class, "mouth");
+      /*  Servo g1 = hardwareMap.get(Servo.class, "g1");
         Servo g2 = hardwareMap.get(Servo.class, "g2");*/
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -113,7 +122,9 @@ public class omniomnoi3 extends LinearOpMode {
         motor2.setDirection(DcMotor.Direction.FORWARD);
         motor3.setDirection(DcMotor.Direction.REVERSE);
         motor4.setDirection(DcMotor.Direction.REVERSE);
+     //   arm.setDirection(DcMotor.Direction.FORWARD);
         arm.setDirection(DcMotor.Direction.FORWARD);
+        u.setDirection(DcMotor.Direction.FORWARD);
         crane.setDirection(DcMotor.Direction.FORWARD);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -187,7 +198,7 @@ public class omniomnoi3 extends LinearOpMode {
                 motor3.setPower(right1Power);
                 motor4.setPower(right2Power);
             }
-            // arm control
+            // arm control (lifting system)
 
             if( gamepad1.dpad_up){
                 arm.setPower(1);
@@ -199,20 +210,55 @@ public class omniomnoi3 extends LinearOpMode {
                 {
                 arm.setPower(0);
             }
-
-
-            double grabpos = 0.5;
-
-
-            if(gamepad1.dpad_right)
+            //rope system
+            if (gamepad1.left_bumper)
             {
-            //    grabpos += 1.0;
-            }
-                //                //open
-            else if(gamepad1.dpad_left)
+                crane.setPower(1);
+            }else if (gamepad1.right_bumper)
             {
-               // grabpos += 1.0;
+                crane.setPower(-1);
+            }else
+            {
+                crane.setPower(0);
             }
+
+            //ball arm
+
+
+            if( gamepad1.dpad_right){
+                u.setPower(1);
+                //up
+            }else if(gamepad1.dpad_left){//schroefstpindel
+                //down
+                u.setPower(-1);
+            }else
+            {
+                u.setPower(0);
+            }
+
+            //Arm klein en groot maken
+            if(gamepad1.left_trigger > 0.3)
+            {
+                I.setPower(1);
+            } else if (gamepad1.right_trigger > 0.3)
+            {
+                I.setPower(-1);
+            }else
+            {
+                I.setPower(0);
+            }
+
+            if (gamepad1.start)
+            {
+                mouth.setPower(1);
+            }else if (gamepad1.back)
+            {
+                mouth.setPower(-1);
+            }else
+            {
+                mouth.setPower(0);
+            }
+
 
                 //                //close
                 //
@@ -227,30 +273,30 @@ public class omniomnoi3 extends LinearOpMode {
                 grapservo -= 1;
             }
             double grabpos = Range.clip(grapservo, -1.0, 1.0); */
-           if (gamepad1.left_bumper)
-           {
-               crane.setPower(1);
-            //   arm.setPower(0.14);
-           }
-           else if (gamepad1.right_bumper)
-           {
-               crane.setPower(-1);
-              // arm.setPower(-0.14);
-           }
-           else
-           {
-               crane.setPower(0.0);
-              // arm.setPower(0.0);
-           }
-
-if(gamepad1.dpad_left){
-               front.setPower(1.0);
-}else if(gamepad1.dpad_right){
-               front.setPower(-1.0);
-}else{
-               front.setPower(0
-               );
-}
+//           if (gamepad1.left_bumper)
+//           {
+//               crane.setPower(1);
+//            //   arm.setPower(0.14);
+//           }
+//           else if (gamepad1.right_bumper)
+//           {
+//               crane.setPower(-1);
+//              // arm.setPower(-0.14);
+//           }
+//           else
+//           {
+//               crane.setPower(0.0);
+//              // arm.setPower(0.0);
+//           }
+//
+//if(gamepad1.dpad_left){
+//               front.setPower(1.0);
+//}else if(gamepad1.dpad_right){
+//               front.setPower(-1.0);
+//}else{
+//               front.setPower(0
+//               );
+//}
 
 
 
@@ -278,15 +324,15 @@ if(gamepad1.dpad_left){
             // Send calculated power to wheels
             //leftDrive.setPower(leftPower);
             //rightDrive.setPower(rightPower);
-            NormalizedRGBA colors = colorSensor.getNormalizedColors();
+     //       NormalizedRGBA colors = colorSensor.getNormalizedColors();
 
 
-            telemetry.addData("color", colors.red + " " + colors.green + " " + colors.blue);
-            if(colors.red > 0.5 && colors.green > 0.5 && colors.blue < 0.3){
-            telemetry.addData("col", "yellow");
-            }else if(colors.red > 0.02 && colors.blue < 0.1){
-                telemetry.addData("col", "yellow");
-            }
+//            telemetry.addData("color", colors.red + " " + colors.green + " " + colors.blue);
+//            if(colors.red > 0.5 && colors.green > 0.5 && colors.blue < 0.3){
+//            telemetry.addData("col", "yellow");
+//            }else if(colors.red > 0.02 && colors.blue < 0.1){
+//                telemetry.addData("col", "yellow");
+//            }
 
 
             telemetry.addData("motor1 Position", "" +  motor1.getCurrentPosition());
